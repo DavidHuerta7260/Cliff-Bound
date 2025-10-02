@@ -396,10 +396,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.37335494
+  m_Height: 2.1074424
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: -0.5}
+  m_Center: {x: -0.000011501522, y: 0.9007194, z: -0.2079317}
 --- !u!4 &494364987
 Transform:
   m_ObjectHideFlags: 0
@@ -408,7 +408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 494364981}
   m_LocalRotation: {x: 0, y: 0.9964445, z: 0, w: 0.08425182}
-  m_LocalPosition: {x: 114.2982, y: 0.52, z: 209.2496}
+  m_LocalPosition: {x: 114.2982, y: -0.121, z: 209.211}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1280961798}
@@ -807,7 +807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5c21f602d4eefcc4dbcdd55321142ed8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.102
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5c21f602d4eefcc4dbcdd55321142ed8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1128,7 +1128,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 5c21f602d4eefcc4dbcdd55321142ed8, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 9f279fe3944695a4cb8bd51e35c247e7, type: 2}
+      objectReference: {fileID: 9100000, guid: 99f100607bbf504498adb8ebb7e28abc, type: 2}
     - target: {fileID: 5866666021909216657, guid: 5c21f602d4eefcc4dbcdd55321142ed8, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
