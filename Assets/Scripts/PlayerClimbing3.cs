@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerClimbing3 : MonoBehaviour
 {
+    public float rayLength;
     public enum PlayerState
     {
         WALKING,
@@ -68,6 +69,10 @@ public class PlayerClimbing3 : MonoBehaviour
         
         rb.useGravity = state != PlayerState.CLIMBING;
 
+        if (state == PlayerState.CLIMBING)
+            rayLength = 0.05f;
+        else
+            rayLength = 1f;
         //Reset input
         jumpDown = false;
     }
