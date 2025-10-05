@@ -224,7 +224,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1.432, y: -48}
-  m_SizeDelta: {x: 548.1843, y: 242.9438}
+  m_SizeDelta: {x: 663.099, y: 260.524}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &348195828
 MonoBehaviour:
@@ -259,7 +259,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Game Designers: Ademir Avlies, David Huerta, Matthew Schoen
+  m_Text: 'Game Designers: Ademir Avlies, David Huerta, and Matthew Schoen
 
 
     Music:
