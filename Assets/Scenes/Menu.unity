@@ -124,18 +124,12 @@ NavMeshSettings:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 =======
-=======
->>>>>>> Stashed changes
 --- !u!224 &147337555 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7326068769791879945, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
   m_PrefabInstance: {fileID: 7326068769653987930}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 >>>>>>> Stashed changes
 --- !u!1 &199774450
 GameObject:
@@ -732,11 +726,8 @@ RectTransform:
   - {fileID: 382930603}
   - {fileID: 1326822246}
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   - {fileID: 1194024858}
 =======
-=======
->>>>>>> Stashed changes
   - {fileID: 147337555}
 >>>>>>> Stashed changes
   m_Father: {fileID: 0}
@@ -1151,7 +1142,6 @@ CanvasRenderer:
 PrefabInstance:
   m_ObjectHideFlags: 0
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1504,8 +1494,6 @@ CanvasRenderer:
   m_GameObject: {fileID: 1850665502}
   m_CullTransparentMesh: 1
 =======
-=======
->>>>>>> Stashed changes
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 664716971}
@@ -1600,7 +1588,4 @@ CanvasRenderer:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 >>>>>>> Stashed changes
