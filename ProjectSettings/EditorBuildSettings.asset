@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: f8ba9567fac7d3a4fb80ff2581be0e3b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ClimbingTerrain.unity
     guid: 7550363bfc8e76f4fa84c2e270a840e2
   - enabled: 1

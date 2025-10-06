@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("ClimbingTerrain");
+        SceneManager.LoadScene("Stage1.2");
     }
 
     // Call this when the Credits button is pressed
