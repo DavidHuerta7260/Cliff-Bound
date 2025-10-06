@@ -11,7 +11,9 @@ public class PlayerClimbing3 : MonoBehaviour
         FALLING,
         CLIMBING
     }
-    [SerializeField] public PlayerState state = PlayerState.CLIMBING;
+
+    // (You can leave this as-is or set to WALKING to start on the ground)
+    [SerializeField] public PlayerState state = PlayerState.WALKING; // CHANGED: default WALKING is typical
 
     [SerializeField] float walkSpeed = 3f;
     [SerializeField] float climbSpeed = 2f;
@@ -23,6 +25,7 @@ public class PlayerClimbing3 : MonoBehaviour
     float h = 0f;
     float v = 0f;
     bool jumpDown = false;
+    bool leftClickDown = false; // NEW: LMB toggles climbing
 
     void Start()
     {
@@ -37,6 +40,9 @@ public class PlayerClimbing3 : MonoBehaviour
         v = Input.GetAxis("Vertical");
         if (!jumpDown)
             jumpDown = Input.GetButtonDown("Jump");
+
+        if (!leftClickDown)
+            leftClickDown = Input.GetMouseButtonDown(0); // NEW: Left Click capture
     }
 
     void FixedUpdate()
@@ -46,6 +52,29 @@ public class PlayerClimbing3 : MonoBehaviour
         Vector3 moveDirection = Quaternion.FromToRotation(cam.up, Vector3.up)
                                 * cam.TransformDirection(new Vector3(input.x, 0f, input.y));
 
+        // NEW: Handle Left-Click climb toggle BEFORE state switch
+        if (leftClickDown)
+        {
+            if (state == PlayerState.CLIMBING)
+            {
+                // Let go of wall
+                state = PlayerState.WALKING;
+            }
+            else
+            {
+                // Enter climb only if near a wall in front
+                RaycastHit wallHit;
+                if (IsNearWall(out wallHit))
+                {
+                    state = PlayerState.CLIMBING;
+                    // Optional snap toward wall (kept minimal; main snap happens inside HandleClimbing)
+                    // rb.position = wallHit.point + wallHit.normal * 0.05f;
+                    // transform.forward = -wallHit.normal;
+                    // rb.velocity = Vector3.zero;
+                }
+            }
+        }
+
         if (anim)
         {
             anim.SetInteger("State", (int)state);
@@ -53,9 +82,9 @@ public class PlayerClimbing3 : MonoBehaviour
 
         switch (state)
         {
-        case PlayerState.WALKING: { HandleWalking(moveDirection); } break;
-        case PlayerState.FALLING: { HandleFalling(); } break;
-        case PlayerState.CLIMBING: { HandleClimbing(input); } break;
+            case PlayerState.WALKING: { HandleWalking(moveDirection); } break;
+            case PlayerState.FALLING: { HandleFalling(); } break;
+            case PlayerState.CLIMBING: { HandleClimbing(input); } break;
         }
 
         RaycastHit hit;
@@ -66,15 +95,17 @@ public class PlayerClimbing3 : MonoBehaviour
             state = PlayerState.WALKING;
         else if (state == PlayerState.WALKING)
             state = PlayerState.FALLING;
-        
+
         rb.useGravity = state != PlayerState.CLIMBING;
 
         if (state == PlayerState.CLIMBING)
             rayLength = 0.05f;
         else
             rayLength = 1f;
-        //Reset input
+
+        // Reset single-frame inputs
         jumpDown = false;
+        leftClickDown = false; // NEW
     }
 
     void HandleWalking(Vector3 moveDirection)
@@ -101,9 +132,10 @@ public class PlayerClimbing3 : MonoBehaviour
 
     void HandleFalling()
     {
-        if (jumpDown && Physics.Raycast(transform.position,
-                                        transform.forward*0.4f))
-            state = PlayerState.CLIMBING;
+        // REMOVED old auto-climb on jump:
+        // if (jumpDown && Physics.Raycast(transform.position, transform.forward*0.4f))
+        //     state = PlayerState.CLIMBING;
+        // Now climbing is ONLY via Left Click when near a wall.
     }
 
     void HandleClimbing(Vector2 input)
@@ -111,7 +143,7 @@ public class PlayerClimbing3 : MonoBehaviour
         anim.SetFloat("H", input.x);
         anim.SetFloat("V", input.y);
 
-        // Check walls in a cross pattern
+        // Check walls in a cross pattern (unchanged)
         Vector3 offset = transform.TransformDirection(Vector2.one * 0.5f);
         Vector3 checkDirection = Vector3.zero;
         int k = 0;
@@ -128,23 +160,24 @@ public class PlayerClimbing3 : MonoBehaviour
             // Rotate Offset by 90 degrees
             offset = Quaternion.AngleAxis(90f, transform.forward) * offset;
         }
-        checkDirection /= k;
+        if (k > 0) checkDirection /= k;
 
-        // Check wall directly in front
+        // Check wall directly in front (unchanged)
         RaycastHit hit;
         if (Physics.Raycast(transform.position, -checkDirection, out hit))
         {
             float dot = Vector3.Dot(transform.forward, -hit.normal);
-            
+
             rb.position = Vector3.Lerp(rb.position,
                                         hit.point + hit.normal * 0.05f,
                                         5f * Time.fixedDeltaTime);
             transform.forward = Vector3.Lerp(transform.forward,
                                             -hit.normal,
                                             10f * Time.fixedDeltaTime);
-            
+
             rb.useGravity = false;
             rb.velocity = transform.TransformDirection(input) * climbSpeed;
+
             if (jumpDown)
             {
                 rb.velocity = Vector3.up * 5f + hit.normal * 2f;
@@ -155,6 +188,14 @@ public class PlayerClimbing3 : MonoBehaviour
         {
             state = PlayerState.FALLING;
         }
+    }
+
+    // NEW: simple front wall check using rayLength (1f when not climbing)
+    bool IsNearWall(out RaycastHit wallHit)
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.5f; // lift ray to avoid floor
+        float dist = Mathf.Max(0.1f, (state == PlayerState.CLIMBING) ? 0.3f : 1.0f);
+        return Physics.Raycast(origin, transform.forward, out wallHit, dist);
     }
 
     Vector2 SquareToCircle(Vector2 input)

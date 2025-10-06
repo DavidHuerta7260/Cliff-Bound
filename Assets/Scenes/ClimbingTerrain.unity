@@ -428,7 +428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayLength: 0
-  state: 2
+  state: 0
   walkSpeed: 5
   climbSpeed: 5
   model: {fileID: 1280961798}
@@ -704,7 +704,7 @@ MonoBehaviour:
   sensitivityY: 2
   minPitch: -70
   maxPitch: 70
-  invertY: 0
+  followSmooth: 0.15
 --- !u!1 &1073111604 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 8be528d13f99fd244a7fa217ec546b1b, type: 3}
