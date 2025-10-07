@@ -12,12 +12,14 @@ public class PlayerClimbing3 : MonoBehaviour
         CLIMBING
     }
 
-    // (You can leave this as-is or set to WALKING to start on the ground)
-    [SerializeField] public PlayerState state = PlayerState.WALKING; // CHANGED: default WALKING is typical
+    [SerializeField] public PlayerState state = PlayerState.WALKING;
 
     [SerializeField] float walkSpeed = 3f;
     [SerializeField] float climbSpeed = 2f;
     [SerializeField] Transform model;
+
+    [Header("Air Control")]
+    [SerializeField, Range(0f, 1f)] float airControl = 0.6f; // mid-air horizontal control
 
     Rigidbody rb;
     Animator anim;
@@ -25,7 +27,7 @@ public class PlayerClimbing3 : MonoBehaviour
     float h = 0f;
     float v = 0f;
     bool jumpDown = false;
-    bool leftClickDown = false; // NEW: LMB toggles climbing
+    bool leftClickDown = false; // LMB toggles climbing
 
     void Start()
     {
@@ -42,7 +44,7 @@ public class PlayerClimbing3 : MonoBehaviour
             jumpDown = Input.GetButtonDown("Jump");
 
         if (!leftClickDown)
-            leftClickDown = Input.GetMouseButtonDown(0); // NEW: Left Click capture
+            leftClickDown = Input.GetMouseButtonDown(0); // Left Click
     }
 
     void FixedUpdate()
@@ -52,7 +54,7 @@ public class PlayerClimbing3 : MonoBehaviour
         Vector3 moveDirection = Quaternion.FromToRotation(cam.up, Vector3.up)
                                 * cam.TransformDirection(new Vector3(input.x, 0f, input.y));
 
-        // NEW: Handle Left-Click climb toggle BEFORE state switch
+        // Handle Left-Click climb toggle BEFORE state switch
         if (leftClickDown)
         {
             if (state == PlayerState.CLIMBING)
@@ -67,45 +69,33 @@ public class PlayerClimbing3 : MonoBehaviour
                 if (IsNearWall(out wallHit))
                 {
                     state = PlayerState.CLIMBING;
-                    // Optional snap toward wall (kept minimal; main snap happens inside HandleClimbing)
-                    // rb.position = wallHit.point + wallHit.normal * 0.05f;
-                    // transform.forward = -wallHit.normal;
-                    // rb.velocity = Vector3.zero;
+                    // (optional) snap toward wall here if desired
                 }
             }
         }
 
-        if (anim)
-        {
-            anim.SetInteger("State", (int)state);
-        }
+        if (anim) anim.SetInteger("State", (int)state);
 
         switch (state)
         {
             case PlayerState.WALKING: { HandleWalking(moveDirection); } break;
-            case PlayerState.FALLING: { HandleFalling(); } break;
+            case PlayerState.FALLING: { HandleFalling(moveDirection); } break; // pass moveDirection for air control
             case PlayerState.CLIMBING: { HandleClimbing(input); } break;
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, // Position
-                            Vector3.down, // Direction
-                            out hit, // Hit Data
-                            1.02f)) // Max Length
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.02f))
             state = PlayerState.WALKING;
         else if (state == PlayerState.WALKING)
             state = PlayerState.FALLING;
 
         rb.useGravity = state != PlayerState.CLIMBING;
 
-        if (state == PlayerState.CLIMBING)
-            rayLength = 0.05f;
-        else
-            rayLength = 1f;
+        rayLength = (state == PlayerState.CLIMBING) ? 0.05f : 1f;
 
         // Reset single-frame inputs
         jumpDown = false;
-        leftClickDown = false; // NEW
+        leftClickDown = false;
     }
 
     void HandleWalking(Vector3 moveDirection)
@@ -115,27 +105,31 @@ public class PlayerClimbing3 : MonoBehaviour
         Vector3 oldVelo = rb.velocity;
         Vector3 newVelo = moveDirection * walkSpeed;
         newVelo.y = oldVelo.y;
+
         if (jumpDown)
         {
             newVelo.y = 5f;
             state = PlayerState.FALLING;
         }
+
         rb.velocity = newVelo;
 
         if (moveDirection.sqrMagnitude > 0.01f)
         {
             transform.forward = Vector3.Lerp(transform.forward,
-                                            moveDirection,
-                                            10f * Time.fixedDeltaTime);
+                                             moveDirection,
+                                             10f * Time.fixedDeltaTime);
         }
     }
 
-    void HandleFalling()
+    // Air control while falling
+    void HandleFalling(Vector3 moveDirection)
     {
-        // REMOVED old auto-climb on jump:
-        // if (jumpDown && Physics.Raycast(transform.position, transform.forward*0.4f))
-        //     state = PlayerState.CLIMBING;
-        // Now climbing is ONLY via Left Click when near a wall.
+        Vector3 v3 = rb.velocity;
+        Vector3 horiz = moveDirection * walkSpeed * airControl;
+        v3.x = horiz.x;
+        v3.z = horiz.z;
+        rb.velocity = v3;
     }
 
     void HandleClimbing(Vector2 input)
@@ -150,9 +144,7 @@ public class PlayerClimbing3 : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             RaycastHit checkHit;
-            if (Physics.Raycast(transform.position + offset,
-                                transform.forward,
-                                out checkHit))
+            if (Physics.Raycast(transform.position + offset, transform.forward, out checkHit))
             {
                 checkDirection += checkHit.normal;
                 k++;
@@ -169,14 +161,22 @@ public class PlayerClimbing3 : MonoBehaviour
             float dot = Vector3.Dot(transform.forward, -hit.normal);
 
             rb.position = Vector3.Lerp(rb.position,
-                                        hit.point + hit.normal * 0.05f,
-                                        5f * Time.fixedDeltaTime);
+                                       hit.point + hit.normal * 0.05f,
+                                       5f * Time.fixedDeltaTime);
             transform.forward = Vector3.Lerp(transform.forward,
-                                            -hit.normal,
-                                            10f * Time.fixedDeltaTime);
+                                             -hit.normal,
+                                             10f * Time.fixedDeltaTime);
 
             rb.useGravity = false;
-            rb.velocity = transform.TransformDirection(input) * climbSpeed;
+
+            // FIX: map climb input to LOCAL X (left/right) and LOCAL Y (up/down)
+            Vector3 climbLocal = new Vector3(input.x, input.y, 0f);
+            Vector3 climbWorld = transform.TransformDirection(climbLocal);
+
+            // prevent any push into/out of wall
+            climbWorld = Vector3.ProjectOnPlane(climbWorld, hit.normal);
+
+            rb.velocity = climbWorld * climbSpeed;
 
             if (jumpDown)
             {
@@ -190,7 +190,7 @@ public class PlayerClimbing3 : MonoBehaviour
         }
     }
 
-    // NEW: simple front wall check using rayLength (1f when not climbing)
+    // simple front wall check using rayLength (1f when not climbing)
     bool IsNearWall(out RaycastHit wallHit)
     {
         Vector3 origin = transform.position + Vector3.up * 0.5f; // lift ray to avoid floor
