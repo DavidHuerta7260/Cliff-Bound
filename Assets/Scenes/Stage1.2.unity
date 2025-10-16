@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43803602, g: 0.48601288, b: 0.5662875, a: 1}
+  m_IndirectSpecularColor: {r: 0.43803644, g: 0.4860134, b: 0.5662882, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -291,7 +291,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.size
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[0]
@@ -304,12 +304,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[3]
-      value: Some walls are hard to grab onto, press E shoot your grappling hook
-        in the direction you're facing.
+      value: When facing a wall left clicking will allow you to enter a climbing
+        mode, then use your movement keys.
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[4]
-      value: Your hook can go through terrain, but only works on rough walls.
+      value: When facing a wall left clicking will allow you to enter a climbing
+        mode, then use your movement keys.
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[5]
@@ -334,11 +335,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -162.411
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: -42.368
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -346,6 +347,42 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_fontSize
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e1a14b386162b43488f8f35f249de0e9, type: 2}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_wordSpacing
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7022011252938454394, guid: e1a14b386162b43488f8f35f249de0e9, type: 2}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_characterSpacing
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
