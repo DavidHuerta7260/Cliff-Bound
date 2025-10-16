@@ -197,10 +197,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialougeBox
       objectReference: {fileID: 0}
-    - target: {fileID: 7326068769791879944, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879945, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -286,36 +282,32 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: textSpeed
-      value: 0.035
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.size
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[0]
-      value: Welcome to Cliffbound! Your goal is to keep ascending the mountian.
-        (Click to continue)
+      value: Welcome to Cliffbound! Your goal is to ascend the mountian using the
+        white rocks. (Click to continue)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: lines.Array.data[1]
+      value: You are a here to test the saftey of this climbing path for others to
+        come!
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[2]
-      value: Make sure to follow the white rocks stay on the right path
+      value: Use the "WASD" keys to move around and Spacebar to jump.
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[3]
-      value: When facing a wall left clicking will allow you to enter a climbing
-        mode, then use your movement keys.
+      value: Face a wall and left click to enter a climbing mode, then use your movement
+        keys.
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[4]
-      value: When facing a wall left clicking will allow you to enter a climbing
-        mode, then use your movement keys.
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: lines.Array.data[5]
-      value: When facing a wall left clicking will allow you to enter a climbing
-        mode, then use your movement keys.
+      value: Face a wall and left click to enter a climbing mode, then use your movement
+        keys.
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -335,54 +327,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -162.411
+      value: -183.595
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -42.368
+      value: -63.552
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_fontSize
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: e1a14b386162b43488f8f35f249de0e9, type: 2}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_wordSpacing
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 7022011252938454394, guid: e1a14b386162b43488f8f35f249de0e9, type: 2}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_characterSpacing
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_VerticalAlignment
-      value: 512
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068771372968087, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
