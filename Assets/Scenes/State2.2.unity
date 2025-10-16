@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43803614, g: 0.48601305, b: 0.5662879, a: 1}
+  m_IndirectSpecularColor: {r: 0.43803602, g: 0.48601288, b: 0.5662875, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -429,6 +429,15 @@ MonoBehaviour:
   walkSpeed: 5
   climbSpeed: 5
   model: {fileID: 1280961798}
+  jumpForce: 5
+  maxChargedJumpForce: 14
+  chargeDuration: 0.6
+  airControl: 0.7
+  fallTurnSpeed: 10
+  maxAirJumps: 1
+  groundCheckDistance: 0.6
+  groundCheckYOffset: 0.1
+  spawnSuppressTime: 0.35
 --- !u!1001 &642126988
 PrefabInstance:
   m_ObjectHideFlags: 0
