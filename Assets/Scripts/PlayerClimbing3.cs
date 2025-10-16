@@ -1,100 +1,100 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerClimbing3 : MonoBehaviour
 {
-    public float rayLength;
-
     public enum PlayerState { WALKING, FALLING, CLIMBING }
+    public PlayerState state = PlayerState.WALKING;
 
-    [SerializeField] public PlayerState state = PlayerState.WALKING;
-
-    [Header("Speeds")]
-    [SerializeField] float walkSpeed = 3f;
-    [SerializeField] float climbSpeed = 2f;
-    [SerializeField] Transform model;
-
-    [Header("Jump / Air")]
-    [SerializeField] float jumpForce = 5f;               // base jump
-    [SerializeField] float maxChargedJumpForce = 9f;     // hold Space to reach this
-    [SerializeField] float chargeDuration = 0.6f;        // time to max charge
-    [SerializeField, Range(0f, 1f)] float airControl = 0.7f;
-    [SerializeField] float fallTurnSpeed = 10f;
-
-    [Header("Double Jump")]
-    [SerializeField, Min(0)] int maxAirJumps = 1;        // 1 = classic double jump
-    int airJumpsLeft = 0;
-
-    [Header("Ground Check")]
-    [SerializeField] float groundCheckDistance = 0.6f;
-    [SerializeField] float groundCheckYOffset = 0.1f;
-
-    [Header("Spawn Anti-Fall")]
-    [SerializeField] float spawnSuppressTime = 0.35f;    // force WALKING this long after start
-    float spawnTimer = 0f;
-
-    // Animator param names (so you can rename in controller if needed)
-    const string PARAM_STATE = "State";
-    const string PARAM_READY = "Ready";
-
+    [Header("Refs")]
+    public Transform model;
     Rigidbody rb;
     Animator anim;
 
-    float h = 0f, v = 0f;
+    [Header("Speeds")]
+    public float walkSpeed = 3f;
+    public float climbSpeed = 2f;
 
-    // Jump input flags
-    bool jumpDown = false;   // pressed this frame
-    bool jumpHeld = false;   // currently held
-    bool jumpUp = false;     // released this frame
+    [Header("Jump / Charge")]
+    public float jumpForce = 5f;
+    public float maxChargedJumpForce = 9f;
+    public float chargeDuration = 0.6f;
+    public float crouchEnterDelay = 0.12f;
 
-    // Left-click climb toggle
-    bool leftClickDown = false;
+    [Header("Air Control")]
+    [Range(0f, 1f)] public float airControl = 0.7f;
+    public float fallTurnSpeed = 10f;
+    public int maxAirJumps = 1;
 
-    // Charge jump state
-    bool isCharging = false;
-    float chargeTimer = 0f;
+    [Header("Ground Check")]
+    public float groundCheckDistance = 0.6f;
+    public float groundCheckYOffset = 0.1f;
+    public float firmGroundYVel = 0.05f;
 
-    // Track when we've armed the Animator to allow jumps
-    bool armedAnimator = false;
+    [Header("Startup")]
+    public float spawnSuppressTime = 0.35f;
+
+    [Header("Climb Detect (improves LMB-from-ground)")]
+    public float climbDetectRadius = 0.25f;   // fatter than a ray
+    public float climbDetectDistance = 0.9f;  // how far forward to search
+    public float climbDetectUpOffset = 0.9f;  // chest/head height
+    public float climbDetectDownOffset = 0.3f;// hips height
+    public LayerMask climbableLayers = ~0;    // by default: everything
+
+    [Header("Climb Enter/Exit")]
+    public string climbEnterClip = "Rig|Climb_Enter";
+    public float climbEnterLockTime = 0.35f;
+    public string climbExitClip = "Rig|Climb_Exit";
+    public float climbExitLockTime = 0.35f;
+    public float exitFloorCheckDist = 0.25f;
+    [Range(0f, 1f)] public float exitMinUpDot = 0.6f;
+
+    // Animator params / clips
+    const string P_STATE = "State";   // 0 walk, 1 fall, 2 climb
+    const string P_GROUNDED = "Grounded";
+    const string P_READY = "Ready";
+    const string P_CHARGING = "Charging";
+    const string P_CHARGEAMOUNT = "ChargeAmount";
+    const string P_CHARGERELEASE = "ChargeRelease";
+    const string P_H = "H";
+    const string P_V = "V";
+    const string C_CROUCHIDLE = "Rig|Crouch_Idle_Loop";
+    const string C_JUMPLOOP = "Rig|Jump_Loop";
+
+    // runtime flags
+    bool isClimbEntering = false; float climbEnterTimer = 0f;
+    bool isClimbExiting = false; float climbExitTimer = 0f; Vector3 exitTargetPoint;
+
+    int airJumpsLeft; float spawnTimer;
+    float h, v; bool jumpDown, jumpHeld, jumpUp, leftClickDown;
+
+    // charge (no crouch-move; holding Space freezes WASD)
+    bool consideringCharge, isCharging, passedCrouchDelay, showedCrouchIdle; float chargeTimer;
 
     void Awake()
     {
-        // Get Animator as early as possible (before first Animator evaluation)
+        rb = GetComponent<Rigidbody>();
         anim = (model ? model.GetComponent<Animator>() : null) ?? GetComponentInChildren<Animator>();
 
-        // Hard-start as WALKING so Animator never sees FALLING on frame 0
         state = PlayerState.WALKING;
-
         if (anim)
         {
-            anim.Rebind();           // reset graph to default state
-            anim.Update(0f);         // apply immediately (frame 0)
-            anim.SetInteger(PARAM_STATE, 0);
-            // Gate jump transitions until we say so
-            anim.SetBool(PARAM_READY, false);
+            anim.Rebind(); anim.Update(0f);
+            anim.SetInteger(P_STATE, 0);
+            anim.SetBool(P_READY, false);
+            anim.SetBool(P_GROUNDED, true);
+            anim.SetBool(P_CHARGING, false);
+            anim.SetFloat(P_CHARGEAMOUNT, 0f);
         }
-    }
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        if (!anim) anim = (model ? model.GetComponent<Animator>() : null) ?? GetComponentInChildren<Animator>();
         airJumpsLeft = maxAirJumps;
-        armedAnimator = false; // will set Ready=true after the suppress window
     }
 
     void Update()
     {
         h = Input.GetAxis("Horizontal");
         v = Input.GetAxis("Vertical");
-
-        // Jump inputs
         if (!jumpDown) jumpDown = Input.GetButtonDown("Jump");
         jumpHeld = Input.GetButton("Jump");
         if (!jumpUp) jumpUp = Input.GetButtonUp("Jump");
-
-        // Climb toggle
         if (!leftClickDown) leftClickDown = Input.GetMouseButtonDown(0);
     }
 
@@ -102,252 +102,333 @@ public class PlayerClimbing3 : MonoBehaviour
     {
         spawnTimer += Time.fixedDeltaTime;
 
-        Vector2 input = SquareToCircle(new Vector2(h, v));
         Transform cam = Camera.main ? Camera.main.transform : transform;
-        Vector3 moveDirection =
-            Quaternion.FromToRotation(cam.up, Vector3.up) *
-            cam.TransformDirection(new Vector3(input.x, 0f, input.y));
+        Vector2 input2 = SquareToCircle(new Vector2(h, v));
+        Vector3 moveDir = Quaternion.FromToRotation(cam.up, Vector3.up) *
+                          cam.TransformDirection(new Vector3(input2.x, 0f, input2.y));
 
-        // Ground probe
-        Vector3 groundOrigin = transform.position + Vector3.up * groundCheckYOffset;
-        bool grounded = Physics.Raycast(groundOrigin, Vector3.down, groundCheckDistance);
+        bool grounded = Physics.Raycast(transform.position + Vector3.up * groundCheckYOffset, Vector3.down, groundCheckDistance);
+        bool firmGrounded = grounded && rb.velocity.y <= firmGroundYVel;
+        if (anim) anim.SetBool(P_GROUNDED, firmGrounded);
 
-        // -------- SPAWN SUPPRESSION: lock to WALKING & block Jump transitions --------
+        // startup grace
         if (spawnTimer < spawnSuppressTime)
         {
             state = PlayerState.WALKING;
             if (anim)
             {
-                anim.SetInteger(PARAM_STATE, 0);
-                anim.SetBool(PARAM_READY, false); // DO NOT allow jump chain yet
+                anim.SetInteger(P_STATE, 0);
+                anim.SetBool(P_READY, false);
+                anim.SetBool(P_GROUNDED, true);
+                anim.SetBool(P_CHARGING, false);
+                anim.SetFloat(P_CHARGEAMOUNT, 0f);
+                anim.ResetTrigger(P_CHARGERELEASE);
             }
-
-            // Optional: allow horizontal movement during grace window
-            Vector3 v3 = rb.velocity;
-            v3.x = moveDirection.x * walkSpeed;
-            v3.z = moveDirection.z * walkSpeed;
-            rb.velocity = v3;
-
-            rb.useGravity = true;
-            rayLength = 1f;
-
-            // clear one-frame inputs so we don't queue actions during suppression
-            jumpDown = false; jumpUp = false; leftClickDown = false; isCharging = false;
-            return; // skip the rest this frame
+            Vector3 gv = rb.velocity; gv.x = moveDir.x * walkSpeed; gv.z = moveDir.z * walkSpeed; rb.velocity = gv;
+            ResetFrameInputs();
+            return;
         }
-        else if (!armedAnimator)
-        {
-            // Arm the Animator exactly once after the window
-            if (anim) anim.SetBool(PARAM_READY, true);
-            armedAnimator = true;
-        }
-        // ---------------------------------------------------------------------------
+        else if (anim) anim.SetBool(P_READY, true);
 
-        // Left-Click climb toggle BEFORE state machine
-        if (leftClickDown)
+        if (!firmGrounded) // no charge visuals while airborne
+        { consideringCharge = false; isCharging = false; passedCrouchDelay = false; chargeTimer = 0f; showedCrouchIdle = false; KillChargeVisuals(); }
+
+        // ===== LMB: Enter/Exit climb (GROUND: allow enter without jumping) =====
+        if (leftClickDown && !isClimbExiting)
         {
             if (state == PlayerState.CLIMBING)
             {
-                state = PlayerState.WALKING;             // let go
-                airJumpsLeft = maxAirJumps;              // reset air jumps on exit
-                isCharging = false;                      // cancel any charge
+                state = PlayerState.WALKING; airJumpsLeft = maxAirJumps;
+                isClimbEntering = false; KillChargeVisuals();
             }
             else
             {
+                // NEW: robust wall find (capsule/sphere cast) so you can click from ground
                 RaycastHit wallHit;
-                if (IsNearWall(out wallHit))
+                if (FindWall(out wallHit))
                 {
+                    // Snap & face wall
+                    transform.forward = Vector3.Lerp(transform.forward, -wallHit.normal, 1f);
+                    rb.position = wallHit.point + wallHit.normal * 0.05f;
+
                     state = PlayerState.CLIMBING;
-                    isCharging = false;
+
+                    if (firmGrounded)
+                    {
+                        // Grounded: play enter
+                        if (anim) anim.CrossFade(climbEnterClip, 0.05f, 0);
+                        isClimbEntering = true;
+                        climbEnterTimer = Mathf.Max(0.1f, climbEnterLockTime);
+                    }
+                    else
+                    {
+                        // Air latch: no enter
+                        isClimbEntering = false;
+                    }
                 }
             }
         }
+        // ======================================================================
 
-        // ---- CHARGE JUMP (ground only) ----
+        // ===== CHARGE JUMP (holding Space freezes WASD) =====
         if (state == PlayerState.WALKING)
         {
-            // Start charging on initial press
-            if (jumpDown && grounded && !isCharging)
-            {
-                isCharging = true;
-                chargeTimer = 0f;
-            }
+            if (jumpDown && firmGrounded && !consideringCharge && !isCharging)
+            { consideringCharge = true; chargeTimer = 0f; passedCrouchDelay = false; showedCrouchIdle = false; }
 
-            // Continue charging while grounded and held
-            if (isCharging && grounded && jumpHeld)
+            if (consideringCharge)
             {
                 chargeTimer += Time.fixedDeltaTime;
+                if (jumpUp)
+                {
+                    if (chargeTimer < crouchEnterDelay) { KillChargeVisuals(); DoJump(jumpForce); }
+                    else
+                    {
+                        float t = Mathf.Clamp01(chargeTimer / Mathf.Max(0.0001f, chargeDuration));
+                        BeginChargeVisuals(t); DoChargedJump(Mathf.Lerp(jumpForce, maxChargedJumpForce, t));
+                    }
+                    consideringCharge = false;
+                }
+                else if (!passedCrouchDelay && chargeTimer >= crouchEnterDelay && firmGrounded)
+                {
+                    passedCrouchDelay = true; isCharging = true;
+                    float t = Mathf.Clamp01(chargeTimer / Mathf.Max(0.0001f, chargeDuration));
+                    BeginChargeVisuals(t);
+                    consideringCharge = false;
+                }
             }
 
-            // Release (or walked off a ledge while holding) -> perform jump
-            if (isCharging && (!jumpHeld || !grounded))
+            if (isCharging && firmGrounded)
             {
+                chargeTimer += Time.fixedDeltaTime;
                 float t = Mathf.Clamp01(chargeTimer / Mathf.Max(0.0001f, chargeDuration));
-                float force = Mathf.Lerp(jumpForce, maxChargedJumpForce, t);
-                PerformJump(force);                      // sets FALLING immediately
-                isCharging = false;
-                airJumpsLeft = maxAirJumps;              // refill air jumps after takeoff
+                UpdateChargeVisuals(t);
+
+                // Freeze horizontal while holding Space
+                FreezeHorizontal();
+
+                if (!jumpHeld || jumpUp)
+                {
+                    float jf = Mathf.Lerp(jumpForce, maxChargedJumpForce, t);
+                    DoChargedJump(jf);
+                    isCharging = false; passedCrouchDelay = false; chargeTimer = 0f; showedCrouchIdle = false; airJumpsLeft = maxAirJumps;
+                }
             }
         }
         else
         {
-            isCharging = false; // cancel if not walking
+            consideringCharge = false; isCharging = false; passedCrouchDelay = false; chargeTimer = 0f; showedCrouchIdle = false;
+            KillChargeVisuals();
         }
 
-        // ---- STATE MACHINE ----
-        switch (state)
-        {
-            case PlayerState.WALKING: HandleWalking(moveDirection); break;
-            case PlayerState.FALLING: HandleFalling(moveDirection); break;
-            case PlayerState.CLIMBING: HandleClimbing(input); break;
-        }
+        // main states
+        if (state == PlayerState.WALKING) DoWalking(moveDir);
+        else if (state == PlayerState.FALLING) DoFalling(moveDir);
+        else if (state == PlayerState.CLIMBING) DoClimbing(input2);
 
-        // ---- GROUNDED TOGGLES ----
+        // transitions outside climbing
         if (state != PlayerState.CLIMBING)
         {
-            if (grounded && rb.velocity.y <= 0.01f)
-            {
-                state = PlayerState.WALKING;
-                airJumpsLeft = maxAirJumps;
-            }
-            else if (!grounded && state == PlayerState.WALKING)
-            {
-                state = PlayerState.FALLING;
-            }
+            if (firmGrounded && rb.velocity.y <= 0.01f) { state = PlayerState.WALKING; airJumpsLeft = maxAirJumps; }
+            else if (!firmGrounded && state == PlayerState.WALKING) { state = PlayerState.FALLING; }
         }
 
-        rb.useGravity = state != PlayerState.CLIMBING;
-        rayLength = (state == PlayerState.CLIMBING) ? 0.05f : 1f;
-
-        // Set Animator after final state is decided
-        if (anim) anim.SetInteger(PARAM_STATE, (int)state);
-
-        // reset one-frame inputs
-        jumpDown = false;
-        jumpUp = false;
-        leftClickDown = false;
+        if (anim) anim.SetInteger(P_STATE, (int)state);
+        ResetFrameInputs();
     }
 
-    void HandleWalking(Vector3 moveDirection)
+    // ---------- Movement Handlers ----------
+    void DoWalking(Vector3 moveDir)
     {
-        if (anim) anim.SetFloat("V", moveDirection.magnitude);
+        // If charging (or still holding during consider), keep still
+        bool frozen = (isCharging || (consideringCharge && jumpHeld));
+        if (frozen) { FreezeHorizontal(); if (anim) anim.SetFloat("V", 0f); return; }
 
-        Vector3 v3 = rb.velocity;
-        v3.x = moveDirection.x * walkSpeed;
-        v3.z = moveDirection.z * walkSpeed;
+        if (anim) anim.SetFloat("V", moveDir.magnitude);
 
-        // (charge jump is handled in FixedUpdate)
-        rb.velocity = v3;
+        Vector3 v3 = rb.velocity; v3.x = moveDir.x * walkSpeed; v3.z = moveDir.z * walkSpeed; rb.velocity = v3;
 
-        // Face movement on ground
-        Vector3 planar = new Vector3(moveDirection.x, 0f, moveDirection.z);
+        Vector3 planar = new Vector3(moveDir.x, 0f, moveDir.z);
         if (planar.sqrMagnitude > 0.0001f)
-        {
-            Vector3 face = Vector3.Slerp(transform.forward, planar.normalized, 10f * Time.fixedDeltaTime);
-            transform.forward = face;
-        }
+            transform.forward = Vector3.Slerp(transform.forward, planar.normalized, 10f * Time.fixedDeltaTime);
     }
 
-    // Air control + (optional) double jump
-    void HandleFalling(Vector3 moveDirection)
+    void DoFalling(Vector3 moveDir)
     {
-        // Double jump tap in air
-        if (jumpDown && airJumpsLeft > 0)
-        {
-            PerformJump(jumpForce);
-            airJumpsLeft--;
-        }
+        if (jumpDown && airJumpsLeft > 0) { DoJump(jumpForce); airJumpsLeft--; }
 
-        // steer in air
-        Vector3 planar = new Vector3(moveDirection.x, 0f, moveDirection.z);
+        Vector3 planar = new Vector3(moveDir.x, 0f, moveDir.z);
         Vector3 vHoriz = planar.normalized * (walkSpeed * airControl);
-        Vector3 vel = rb.velocity;
-        vel.x = vHoriz.x;
-        vel.z = vHoriz.z;
-        rb.velocity = vel;
+        Vector3 vel = rb.velocity; vel.x = vHoriz.x; vel.z = vHoriz.z; rb.velocity = vel;
 
-        // face input while falling
         if (planar.sqrMagnitude > 0.0001f)
-        {
-            Vector3 look = Vector3.Slerp(transform.forward, planar.normalized, fallTurnSpeed * Time.fixedDeltaTime);
-            transform.forward = look;
-        }
+            transform.forward = Vector3.Slerp(transform.forward, planar.normalized, fallTurnSpeed * Time.fixedDeltaTime);
     }
 
-    void HandleClimbing(Vector2 input)
+    void DoClimbing(Vector2 input)
     {
-        if (anim)
-        {
-            anim.SetFloat("H", input.x);
-            anim.SetFloat("V", input.y);
-        }
+        if (anim) { anim.SetFloat(P_H, input.x); anim.SetFloat(P_V, input.y); }
 
-        // Check walls in a cross pattern (unchanged)
+        // sample wall normal around us
         Vector3 offset = transform.TransformDirection(Vector2.one * 0.5f);
-        Vector3 checkDirection = Vector3.zero;
-        int k = 0;
+        Vector3 sumN = Vector3.zero; int hits = 0;
         for (int i = 0; i < 4; i++)
         {
-            RaycastHit checkHit;
-            if (Physics.Raycast(transform.position + offset, transform.forward, out checkHit))
-            {
-                checkDirection += checkHit.normal;
-                k++;
-            }
+            RaycastHit ch;
+            if (Physics.Raycast(transform.position + offset, transform.forward, out ch)) { sumN += ch.normal; hits++; }
             offset = Quaternion.AngleAxis(90f, transform.forward) * offset;
         }
-        if (k > 0) checkDirection /= k;
+        if (hits > 0) sumN /= hits;
 
-        // Check wall directly in front (unchanged)
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, -checkDirection, out hit))
+        RaycastHit hinfo;
+        if (Physics.Raycast(transform.position, -sumN, out hinfo))
         {
-            rb.position = Vector3.Lerp(rb.position, hit.point + hit.normal * 0.05f, 5f * Time.fixedDeltaTime);
-            transform.forward = Vector3.Lerp(transform.forward, -hit.normal, 10f * Time.fixedDeltaTime);
+            // stick + face wall
+            rb.position = Vector3.Lerp(rb.position, hinfo.point + hinfo.normal * 0.05f, 5f * Time.fixedDeltaTime);
+            transform.forward = Vector3.Lerp(transform.forward, -hinfo.normal, 10f * Time.fixedDeltaTime);
+
+            // AUTO EXIT when very close to floor
+            if (!isClimbEntering && !isClimbExiting)
+            {
+                RaycastHit groundHit;
+                bool nearFloor = Physics.Raycast(transform.position, Vector3.down, out groundHit, exitFloorCheckDist + 0.05f);
+                bool goodFloor = nearFloor && Vector3.Dot(groundHit.normal, Vector3.up) >= exitMinUpDot;
+                if (goodFloor)
+                {
+                    if (anim) anim.CrossFade(climbExitClip, 0.05f, 0);
+                    isClimbExiting = true; climbExitTimer = Mathf.Max(0.1f, climbExitLockTime);
+                    exitTargetPoint = groundHit.point;
+                }
+            }
+
+            if (isClimbExiting)
+            {
+                rb.useGravity = false; rb.velocity = Vector3.zero;
+                rb.position = Vector3.Lerp(rb.position, exitTargetPoint, 8f * Time.fixedDeltaTime);
+                climbExitTimer -= Time.fixedDeltaTime;
+                if (climbExitTimer <= 0f)
+                { state = PlayerState.WALKING; isClimbExiting = false; rb.useGravity = true; rb.position += (-hinfo.normal) * 0.02f; }
+                return;
+            }
 
             rb.useGravity = false;
 
-            // Local X = left/right, Local Y = up/down; keep out-of-wall component zeroed
-            Vector3 climbLocal = new Vector3(input.x, input.y, 0f);
-            Vector3 climbWorld = transform.TransformDirection(climbLocal);
-            climbWorld = Vector3.ProjectOnPlane(climbWorld, hit.normal);
-            rb.velocity = climbWorld * climbSpeed;
+            // freeze during enter
+            if (isClimbEntering)
+            {
+                climbEnterTimer -= Time.fixedDeltaTime;
+                if (climbEnterTimer <= 0f) isClimbEntering = false;
+                rb.velocity = Vector3.zero;
+                return;
+            }
 
-            // Push-off from wall with Jump
+            // normal climb movement
+            Vector3 local = new Vector3(input.x, input.y, 0f);
+            Vector3 world = transform.TransformDirection(local);
+            world = Vector3.ProjectOnPlane(world, hinfo.normal);
+            rb.velocity = world * climbSpeed;
+
             if (jumpDown)
             {
-                rb.velocity = Vector3.up * jumpForce + hit.normal * 2f;
+                rb.velocity = Vector3.up * jumpForce + hinfo.normal * 2f;
                 state = PlayerState.FALLING;
-                airJumpsLeft = maxAirJumps; // allow air jumps after push-off
+                airJumpsLeft = maxAirJumps;
+                isClimbEntering = false; isClimbExiting = false;
             }
         }
         else
         {
-            state = PlayerState.FALLING;
+            state = PlayerState.FALLING; isClimbEntering = false; isClimbExiting = false;
         }
     }
 
-    void PerformJump(float forceY)
+    // ---------- Helpers ----------
+    bool FindWall(out RaycastHit hit)
     {
-        Vector3 v3 = rb.velocity;
-        v3.y = forceY;
-        rb.velocity = v3;
-        state = PlayerState.FALLING; // Animator sees this immediately
-        if (anim) anim.SetInteger(PARAM_STATE, (int)PlayerState.FALLING);
+        // Capsule from hips to head, cast forward with small radius
+        Vector3 origin = transform.position;
+        Vector3 p1 = origin + Vector3.up * climbDetectDownOffset; // hips
+        Vector3 p2 = origin + Vector3.up * climbDetectUpOffset;   // chest/head
+        Vector3 dir = transform.forward;
+
+        // CapsuleCast for wide detection; fall back to SphereCast then Raycast
+        if (Physics.CapsuleCast(p1, p2, climbDetectRadius, dir, out hit, climbDetectDistance, climbableLayers, QueryTriggerInteraction.Ignore))
+            return true;
+
+        Vector3 sphereStart = origin + Vector3.up * ((climbDetectDownOffset + climbDetectUpOffset) * 0.5f);
+        if (Physics.SphereCast(sphereStart, climbDetectRadius, dir, out hit, climbDetectDistance, climbableLayers, QueryTriggerInteraction.Ignore))
+            return true;
+
+        return Physics.Raycast(sphereStart, dir, out hit, climbDetectDistance, climbableLayers, QueryTriggerInteraction.Ignore);
     }
 
-    bool IsNearWall(out RaycastHit wallHit)
+    void FreezeHorizontal()
     {
-        Vector3 origin = transform.position + Vector3.up * 0.5f;
-        float dist = Mathf.Max(0.1f, (state == PlayerState.CLIMBING) ? 0.3f : 1.0f);
-        return Physics.Raycast(origin, transform.forward, out wallHit, dist);
+        Vector3 v3 = rb.velocity; v3.x = 0f; v3.z = 0f; rb.velocity = v3;
     }
 
-    Vector2 SquareToCircle(Vector2 input)
+    void DoJump(float yForce)
     {
-        return (input.sqrMagnitude >= 1f) ? input.normalized : input;
+        Vector3 v3 = rb.velocity; v3.y = yForce; rb.velocity = v3;
+        state = PlayerState.FALLING;
+        if (anim) anim.SetInteger(P_STATE, 1);
+        KillChargeVisuals();
+        isClimbEntering = false; isClimbExiting = false;
+    }
+
+    void DoChargedJump(float yForce)
+    {
+        if (anim) { anim.SetBool(P_CHARGING, false); anim.ResetTrigger(P_CHARGERELEASE); anim.SetTrigger(P_CHARGERELEASE); }
+        DoJump(yForce);
+    }
+
+    void BeginChargeVisuals(float t)
+    {
+        if (!anim) return;
+        anim.SetBool(P_CHARGING, true);
+        anim.SetFloat(P_CHARGEAMOUNT, t);
+        if (!showedCrouchIdle) { anim.CrossFade(C_CROUCHIDLE, 0.05f, 0); showedCrouchIdle = true; }
+    }
+    void UpdateChargeVisuals(float t)
+    {
+        if (!anim) return;
+        anim.SetBool(P_CHARGING, true);
+        anim.SetFloat(P_CHARGEAMOUNT, t);
+    }
+    void KillChargeVisuals()
+    {
+        if (!anim) return;
+        anim.SetBool(P_CHARGING, false);
+        anim.SetFloat(P_CHARGEAMOUNT, 0f);
+        anim.ResetTrigger(P_CHARGERELEASE);
+        showedCrouchIdle = false;
+        if (state == PlayerState.FALLING) anim.CrossFade(C_JUMPLOOP, 0.05f, 0);
+    }
+
+    Vector2 SquareToCircle(Vector2 p) { return (p.sqrMagnitude > 1f) ? p.normalized : p; }
+
+    void ResetFrameInputs() { jumpDown = false; jumpUp = false; leftClickDown = false; }
+
+    // (kept for compatibility if something else reads it)
+    public float rayLength
+    {
+        get { return (state == PlayerState.CLIMBING) ? 0.05f : 1f; }
+        set { }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
