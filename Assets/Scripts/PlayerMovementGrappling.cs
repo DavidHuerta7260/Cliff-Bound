@@ -254,7 +254,7 @@ public class PlayerMovementGrappling : MonoBehaviour
     }
 
     private bool enableMovementOnNextTouch;
-    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    /*public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
     {
         activeGrapple = true;
 
@@ -262,7 +262,19 @@ public class PlayerMovementGrappling : MonoBehaviour
         Invoke(nameof(SetVelocity), 0.1f);
 
         Invoke(nameof(ResetRestrictions), 3f);
+    }*/
+
+    public void JumpToPosition(Vector3 targetPosition, float speed)
+    {
+        activeGrapple = true;
+
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        velocityToSet = direction * speed;
+
+        Invoke(nameof(SetVelocity), 0.1f);
+        Invoke(nameof(ResetRestrictions), 3f);
     }
+
 
     private Vector3 velocityToSet;
     private void SetVelocity()
@@ -306,7 +318,7 @@ public class PlayerMovementGrappling : MonoBehaviour
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 
-    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    /*public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
     {
         float gravity = Physics.gravity.y;
         float displacementY = endPoint.y - startPoint.y;
@@ -318,6 +330,29 @@ public class PlayerMovementGrappling : MonoBehaviour
 
         return velocityXZ + velocityY;
     }
+    */
+
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Mathf.Abs(Physics.gravity.y);
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        float timeToPeak = Mathf.Sqrt(2 * trajectoryHeight / gravity);
+
+        float descentHeight = displacementY - trajectoryHeight;
+        if (descentHeight < 0)
+            descentHeight = 0.01f; // Prevent NaN
+
+        float timeFromPeak = Mathf.Sqrt(2 * descentHeight / gravity);
+        float totalTime = timeToPeak + timeFromPeak;
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / totalTime;
+
+        return velocityXZ + velocityY;
+    }
+
 
     #region Text & Debugging
 

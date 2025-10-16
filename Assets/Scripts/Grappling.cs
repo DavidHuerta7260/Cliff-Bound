@@ -42,7 +42,7 @@ public class Grappling : MonoBehaviour
 
     private void LateUpdate()
     {
-        // if (grappling)
+        //if (grappling)
         //    lr.SetPosition(0, gunTip.position);
     }
 
@@ -54,6 +54,8 @@ public class Grappling : MonoBehaviour
 
         pm.freeze = true;
 
+        //to increase angle, increase cam.forward in some way
+        //could look back at the way knockback was inplemented in the platformer
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
         {
@@ -72,7 +74,7 @@ public class Grappling : MonoBehaviour
         //lr.SetPosition(1, grapplePoint);
     }
 
-    private void ExecuteGrapple()
+    /*private void ExecuteGrapple()
     {
         pm.freeze = false;
 
@@ -86,7 +88,18 @@ public class Grappling : MonoBehaviour
         pm.JumpToPosition(grapplePoint, highestPointOnArc);
 
         Invoke(nameof(StopGrapple), 1f);
+    }*/
+
+    private void ExecuteGrapple()
+    {
+        pm.freeze = false;
+
+        float grappleSpeed = 25f; // Tune this value to your liking
+        pm.JumpToPosition(grapplePoint, grappleSpeed);
+
+        Invoke(nameof(StopGrapple), 1f);
     }
+
 
     public void StopGrapple()
     {
