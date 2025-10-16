@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43803644, g: 0.4860134, b: 0.5662882, a: 1}
+  m_IndirectSpecularColor: {r: 0.43803602, g: 0.48601288, b: 0.5662875, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -197,6 +197,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialougeBox
       objectReference: {fileID: 0}
+    - target: {fileID: 7326068769791879944, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879945, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -282,32 +286,35 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: textSpeed
+      value: 0.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.size
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[0]
-      value: Welcome to Cliffbound! Your goal is to ascend the mountian using the
-        white rocks. (Click to continue)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
-      propertyPath: lines.Array.data[1]
-      value: You are a here to test the saftey of this climbing path for others to
-        come!
+      value: Welcome to Cliffbound! Your goal is to keep ascending the mountian.
+        (Click to continue)
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[2]
-      value: Use the "WASD" keys to move around and Spacebar to jump.
+      value: Make sure to follow the white rocks stay on the right path
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[3]
-      value: Face a wall and left click to enter a climbing mode, then use your movement
-        keys.
+      value: Some walls are hard to grab onto, press E shoot your grappling hook
+        in the direction you're facing.
       objectReference: {fileID: 0}
     - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: lines.Array.data[4]
-      value: Face a wall and left click to enter a climbing mode, then use your movement
-        keys.
+      value: Your hook can go through terrain, but only works on rough walls.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068769791879950, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: lines.Array.data[5]
+      value: When facing a wall left clicking will allow you to enter a climbing
+        mode, then use your movement keys.
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -327,14 +334,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -183.595
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -63.552
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326068771372968086, guid: a848efcc28534af40a47fa99f25f1c7d, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -372,6 +383,7 @@ GameObject:
   - component: {fileID: 494364986}
   - component: {fileID: 494364985}
   - component: {fileID: 494364982}
+  - component: {fileID: 494364989}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -410,7 +422,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 494364981}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
@@ -595,20 +607,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a60622c0a51d449a3d44af0e3b4e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayLength: 0
   state: 0
+  model: {fileID: 1280961798}
   walkSpeed: 5
   climbSpeed: 5
-  model: {fileID: 1280961798}
   jumpForce: 5
   maxChargedJumpForce: 14
   chargeDuration: 0.6
+  crouchEnterDelay: 0.12
   airControl: 0.7
   fallTurnSpeed: 10
   maxAirJumps: 1
   groundCheckDistance: 0.6
   groundCheckYOffset: 0.1
+  firmGroundYVel: 0.05
   spawnSuppressTime: 0.35
+--- !u!114 &494364989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494364981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f0268291e9f3846b7d5ee5124c6fc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slowKey: 113
+  slowTimeScale: 0.4
+  slowDuration: 2.5
+  slowCooldown: 6
+  slowUIText: {fileID: 0}
 --- !u!1001 &642126988
 PrefabInstance:
   m_ObjectHideFlags: 0
