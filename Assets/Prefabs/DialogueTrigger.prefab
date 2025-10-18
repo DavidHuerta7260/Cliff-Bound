@@ -58,5 +58,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueLines:
-  - Hi this is a test
-  - This is a dialouge box we can add throughout the levels!
+  - Welcome to Cliffbound! Your goal is to test the environment! (Click to continue)
+  - Use the "WASD" keys to move around and Spacebar to jump.
+  - Go to the white rocks to start climbing!
