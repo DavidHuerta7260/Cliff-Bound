@@ -17,4 +17,37 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/State2.2.unity
     guid: 5f00bd2c0b884c44fa122a195441ffc2
+  - enabled: 1
+    path: Assets/Scenes/LoadingScenes/LoadingScene.unity
+    guid: 498427eeaec499d4d9f8bc7af11b028d
+  - enabled: 1
+    path: Assets/Scenes/Stage3.2.unity
+    guid: 8265c0938dcdb754e88e80bbb3da701b
+  - enabled: 1
+    path: Assets/Scenes/Stage5.2.unity
+    guid: cd53d8da01c3e3942ba89ff11676233e
+  - enabled: 1
+    path: Assets/Scenes/Stage7.2.unity
+    guid: bf4cd46966abc3742827502182c1216c
+  - enabled: 0
+    path: Assets/Scenes/LoadingScenes/LoadingScene2.2-6.2.unity
+    guid: b477f91a70c76de46a3db91a33c0697e
+  - enabled: 1
+    path: Assets/Scenes/LoadingScenes/LoadingScene6.5-7.2.unity
+    guid: 2abffd115fcc1334f9e1316a081511b3
+  - enabled: 1
+    path: Assets/Scenes/LoadingScenes/LoadingScene4.2-2.2.unity
+    guid: 20b2ceb8e4db7974cad37b42b4d5988b
+  - enabled: 1
+    path: Assets/Scenes/LoadingScenes/LoadingScene3.2-4.2.unity
+    guid: 14c72caa844a3924a91d678b33404c9f
+  - enabled: 1
+    path: Assets/Scenes/LoadingScenes/LoadingScene6.2-6.5.unity
+    guid: 68c8a117ee7c6934a8ab4126ed354d21
+  - enabled: 1
+    path: Assets/Scenes/LoadingScenes/LoadingScene2.2-5.2.unity
+    guid: 2e80e73be2cdf4d42bfe36a1578f817c
+  - enabled: 1
+    path: Assets/Scenes/LoadingScenes/LoadingScene5.2-6.2.unity
+    guid: 8e93c0c6ff1fe3548910e672cf8408ad
   m_configObjects: {}

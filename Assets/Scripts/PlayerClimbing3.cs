@@ -59,6 +59,8 @@ public class PlayerClimbing3 : MonoBehaviour
     const string P_V = "V";
     const string C_CROUCHIDLE = "Rig|Crouch_Idle_Loop";
     const string C_JUMPLOOP = "Rig|Jump_Loop";
+   
+    const string P_IsLoading = "False";
 
     // runtime flags
     bool isClimbEntering = false; float climbEnterTimer = 0f;
@@ -69,6 +71,8 @@ public class PlayerClimbing3 : MonoBehaviour
 
     // charge (no crouch-move; holding Space freezes WASD)
     bool consideringCharge, isCharging, passedCrouchDelay, showedCrouchIdle; float chargeTimer;
+
+    public bool isLoading;
 
     void Awake()
     {
@@ -90,12 +94,20 @@ public class PlayerClimbing3 : MonoBehaviour
 
     void Update()
     {
-        h = Input.GetAxis("Horizontal");
-        v = Input.GetAxis("Vertical");
-        if (!jumpDown) jumpDown = Input.GetButtonDown("Jump");
-        jumpHeld = Input.GetButton("Jump");
-        if (!jumpUp) jumpUp = Input.GetButtonUp("Jump");
-        if (!leftClickDown) leftClickDown = Input.GetMouseButtonDown(0);
+        if (isLoading)
+        {
+            transform.Translate(Vector3.forward * walkSpeed * Time.deltaTime);
+          //  P_IsLoading = "True";
+        }
+        else
+        {
+            h = Input.GetAxis("Horizontal");
+            v = Input.GetAxis("Vertical");
+            if (!jumpDown) jumpDown = Input.GetButtonDown("Jump");
+            jumpHeld = Input.GetButton("Jump");
+            if (!jumpUp) jumpUp = Input.GetButtonUp("Jump");
+            if (!leftClickDown) leftClickDown = Input.GetMouseButtonDown(0);
+        }
     }
 
     void FixedUpdate()
