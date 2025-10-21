@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43815264, g: 0.48615837, b: 0.56643474, a: 1}
+  m_IndirectSpecularColor: {r: 0.4381524, g: 0.48615813, b: 0.5664343, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -454,6 +454,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: NexScenTriZone
       objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage6.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059027555973377794, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage6.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
 --- !u!1 &245384222 stripped
@@ -473,7 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a194dc150800c2e41823804e8d35471e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: 
+  sceneName: LoadingScene5.2-6.2
 --- !u!1 &250726990 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1472568755220612582, guid: d9c42ac8ea22cb44fa72accf76de58c5, type: 3}
@@ -1411,7 +1419,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-356260
+  m_Name: pb_Mesh38752
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4166,7 +4174,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-367602
+  m_Name: pb_Mesh38876
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4786,7 +4794,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-413932
+  m_Name: pb_Mesh38434
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5615,26 +5623,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: NexScenTriZone (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage6.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059027555973377794, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage6.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
---- !u!1 &764200189 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5987056627918362829, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
-  m_PrefabInstance: {fileID: 764200188}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &764200190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 764200189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a194dc150800c2e41823804e8d35471e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneName: LoadingScene5.2-6.2
 --- !u!1 &768039215
 GameObject:
   m_ObjectHideFlags: 0
@@ -11037,7 +11035,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-430730
+  m_Name: pb_Mesh38666
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -14323,7 +14321,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-346944
+  m_Name: pb_Mesh38732
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15134,9 +15132,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: NexScenTriZone (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage6.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7058652969615433147, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
       propertyPath: m_IsTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059027555973377794, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage6.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}

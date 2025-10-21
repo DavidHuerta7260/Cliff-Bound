@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4260865106291522340}
   - component: {fileID: 3112601434109194211}
   - component: {fileID: 7058652969615433147}
+  - component: {fileID: 6472918462802457299}
   m_Layer: 0
   m_Name: NexScenTriZone
   m_TagString: Untagged
@@ -95,3 +96,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6472918462802457299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5987056627918362829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a194dc150800c2e41823804e8d35471e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: State2.2

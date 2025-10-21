@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43688267, g: 0.4845366, b: 0.5647943, a: 1}
+  m_IndirectSpecularColor: {r: 0.43688262, g: 0.4845361, b: 0.5647941, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -276,6 +276,10 @@ PrefabInstance:
     - target: {fileID: 5987056627918362829, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
       propertyPath: m_Name
       value: NexScenTriZone (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage6.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
@@ -23031,6 +23035,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NexScenTriZone (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage6.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
 --- !u!1 &1937751553
@@ -23927,7 +23935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a194dc150800c2e41823804e8d35471e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: 
+  sceneName: LoadingScene6.2-6.5
 --- !u!1001 &2106443758
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24874,6 +24882,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 945262402855935220, guid: 41a59810372c03e49a2152c6bac76d17, type: 3}
+      propertyPath: sceneName
+      value: Stage6.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4344971609238535210, guid: 41a59810372c03e49a2152c6bac76d17, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

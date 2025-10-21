@@ -24,14 +24,23 @@ EditorBuildSettings:
     path: Assets/Scenes/Stage3.2.unity
     guid: 8265c0938dcdb754e88e80bbb3da701b
   - enabled: 1
+    path: Assets/Scenes/Stage4.2.unity
+    guid: fb3cbf26a73bd714fb17ed77483d986a
+  - enabled: 1
     path: Assets/Scenes/Stage5.2.unity
     guid: cd53d8da01c3e3942ba89ff11676233e
+  - enabled: 1
+    path: Assets/Scenes/Stage6.2.unity
+    guid: 55c279dcf949ea342ac2dc1902ab9dcd
+  - enabled: 1
+    path: Assets/Scenes/Stage6.5.unity
+    guid: a48243d017532e9449f6be94fc5fec55
   - enabled: 1
     path: Assets/Scenes/Stage7.2.unity
     guid: bf4cd46966abc3742827502182c1216c
   - enabled: 0
-    path: Assets/Scenes/LoadingScenes/LoadingScene2.2-6.2.unity
-    guid: b477f91a70c76de46a3db91a33c0697e
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/LoadingScenes/LoadingScene6.5-7.2.unity
     guid: 2abffd115fcc1334f9e1316a081511b3
@@ -50,4 +59,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadingScenes/LoadingScene5.2-6.2.unity
     guid: 8e93c0c6ff1fe3548910e672cf8408ad
+  - enabled: 1
+    path: Assets/Scenes/LoadingScene1.2-3.2.unity
+    guid: 1e978b61da4324e47bac9716f323565a
   m_configObjects: {}

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43688267, g: 0.4845366, b: 0.5647943, a: 1}
+  m_IndirectSpecularColor: {r: 0.43688262, g: 0.4845361, b: 0.5647941, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -144,7 +144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5c21f602d4eefcc4dbcdd55321142ed8, type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5c21f602d4eefcc4dbcdd55321142ed8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -797,6 +797,10 @@ PrefabInstance:
     - target: {fileID: 5987056627918362829, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
       propertyPath: m_Name
       value: NexScenTriZone (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage7.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
@@ -1671,7 +1675,7 @@ Transform:
   m_LocalScale: {x: 18.332, y: 15.448, z: 18.488}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &159655323
 Mesh:
@@ -2440,6 +2444,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage7.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
 --- !u!1 &250726990 stripped
@@ -2660,7 +2668,7 @@ Transform:
   - {fileID: 2133034245}
   - {fileID: 902884158}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &326484433 stripped
 GameObject:
@@ -6171,7 +6179,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -20.842}
 --- !u!43 &482899750
 Mesh:
@@ -6516,6 +6524,7 @@ GameObject:
   - component: {fileID: 494364986}
   - component: {fileID: 494364985}
   - component: {fileID: 494364982}
+  - component: {fileID: 494364989}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -6769,6 +6778,34 @@ MonoBehaviour:
   exitFloorCheckDist: 0.25
   exitMinUpDot: 0.6
   isLoading: 0
+--- !u!114 &494364989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494364981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f0268291e9f3846b7d5ee5124c6fc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slowKey: 113
+  slowScale: 0.4
+  slowDuration: 2.5
+  slowCooldown: 6
+  showBar: 1
+  autoFit: 1
+  barSegments: 14
+  barPos: {x: 32, y: 32}
+  barSize: {x: 420, y: 32}
+  barGap: 4
+  borderThickness: 2
+  colorActive: {r: 0, g: 1, b: 1, a: 1}
+  colorCooldown: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  colorReady: {r: 0.3, g: 1, b: 0.3, a: 1}
+  colorBack: {r: 0, g: 0, b: 0, a: 0.38}
+  colorBorder: {r: 1, g: 1, b: 1, a: 0.25}
 --- !u!1001 &502217343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7230,7 +7267,7 @@ Transform:
   - {fileID: 1114750714}
   - {fileID: 1513846488}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &533996242
 GameObject:
@@ -8020,7 +8057,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &593649334
 GameObject:
@@ -10212,7 +10249,7 @@ Transform:
   - {fileID: 1526922627}
   - {fileID: 1462312502}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &838469118
 GameObject:
@@ -11983,7 +12020,7 @@ Transform:
   - {fileID: 1485616230}
   - {fileID: 332697362}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &999864992
 GameObject:
@@ -21763,7 +21800,7 @@ Transform:
   - {fileID: 1226336201}
   - {fileID: 1875445596}
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 283.217, z: 0}
 --- !u!43 &1707936645
 Mesh:
@@ -24496,6 +24533,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NexScenTriZone (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage7.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
 --- !u!1 &1937751553
@@ -25329,7 +25370,7 @@ Transform:
   m_LocalScale: {x: 6.996265, y: 20.959, z: 6.3597536}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!1 &2103756833
 GameObject:
@@ -26136,7 +26177,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2133034244
 GameObject:

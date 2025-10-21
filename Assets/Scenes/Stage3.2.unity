@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43924206, g: 0.48753482, b: 0.5677801, a: 1}
+  m_IndirectSpecularColor: {r: 0.4392418, g: 0.4875347, b: 0.5677796, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2163,7 +2163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6522497815856523853, guid: 5c41ad6c3e371d34280a69686e7caaec, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6522497815856523853, guid: 5c41ad6c3e371d34280a69686e7caaec, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4319,7 +4319,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4523222627937206591, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4523222627937206591, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
       propertyPath: m_LocalScale.x
@@ -4373,9 +4373,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: NexScenTriZone
       objectReference: {fileID: 0}
+    - target: {fileID: 6472918462802457299, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage4.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7058652969615433147, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
       propertyPath: m_IsTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059027555973377794, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
+      propertyPath: sceneName
+      value: Stage4.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba12a1ef48a0a5847af988602facb01b, type: 3}
@@ -5650,7 +5658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4344971609467394925, guid: 41a59810372c03e49a2152c6bac76d17, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4344971609467394925, guid: 41a59810372c03e49a2152c6bac76d17, type: 3}
       propertyPath: m_LocalPosition.x
